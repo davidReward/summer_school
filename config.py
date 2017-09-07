@@ -2,8 +2,8 @@ USERNAME = 'tester'
 PASSWORD = 'python'
 
 configDB = {
-	'user':'sql11193473',
-	'password':'VT7R8n24bw',
-	'host': 'sql11.freemysqlhosting.net',
-	'database':'sql11193473',
+	'user':'jan',
+	'password':'hallotest123',
+	'host': '127.0.0.1',
+	'database':'node1',
 	}
