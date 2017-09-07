@@ -1,8 +1,10 @@
-from flask import Flask, jsonify, abort, make_response, url_for, request
+from flask import Flask, jsonify, abort, make_response, url_for, request, Response
 from flask.ext.httpauth import HTTPBasicAuth
-from createJSON import *
+from db import *
 from flask_cors import CORS, cross_origin
 from config import *
+import sys
+import json
 
 auth = HTTPBasicAuth()
 
@@ -41,21 +43,41 @@ def not_found(error):
 
 
 
-@app.route('/api/insert', methods=['GET'])
+@app.route('/api/insert', methods=['GET', 'POST'])
 @auth.login_required
-def get_mdataUnit(name, pos, description, date):
-    name = request.args.get('begin')
-    end = request.args.get('end')
-    anzahlDatenpunkte =  request.args.get('anzahl')
+def json_in_db():
+    # force erzwingt interpretation als JSON
+    content = request.get_json(force=True)
 
-    if begin is not None and end is not None:
-        query_result = queryDB_station_interval(station, unit, begin, end)
-        query_result =  minimizeData(query_result)
-        if len(query_result) != 0:
-            return jsonify({'Messdaten':  [make_public_mdatum(data) for data in query_result]})
+    # TODO: Daten loeschen mit where 1 cond.
 
-    abort(404)
+    for item in range(0,len(content)):
+        writeDB(content[item]['Name'], 'keine Position', 'keine Beschreibung', content[item]['Timespan'])
+
+    #writeDB(content[0]['Name'], 'keine Position', 'keine Beschreibung', content[0]['Timespan'])
+
+
+    resp = jsonify()
+    resp.status_code = 201
+    return resp
+
+
+@app.route('/api/signer', methods=['GET'])
+def json_from_db():
+    # force erzwingt interpretation als JSON
+
+    print readDB('ram potty')
+
+
+
+    resp = jsonify()
+    resp.status_code = 201
+    return resp
+
 
 if __name__ == '__main__':
+
+    print readDB("amouda")
     #app.run(host='0.0.0.0',port=8080, debug=True)
-    testDB('DUMPer', '8', 'blablup', 'Sept')
+
+

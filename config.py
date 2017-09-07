@@ -1,3 +1,6 @@
+USERNAME = 'tester'
+PASSWORD = 'python'
+
 configDB = {
 	'user':'sql11193473',
 	'password':'VT7R8n24bw',
