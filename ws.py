@@ -62,22 +62,22 @@ def json_in_db():
     return resp
 
 
-@app.route('/api/signer', methods=['GET'])
-def json_from_db():
-    # force erzwingt interpretation als JSON
+@app.route('/api/signer/<string:name>', methods=['GET'])
+@auth.login_required
+def json_from_db(name):
+    query_result = readDB(name)
+    if len(query_result) != 0:
+        return jsonify({'Signers': [query_result]})
 
-    print readDB('ram potty')
+
+    abort(404)
 
 
-
-    resp = jsonify()
-    resp.status_code = 201
-    return resp
 
 
 if __name__ == '__main__':
 
-    print readDB("amouda")
-    #app.run(host='0.0.0.0',port=8080, debug=True)
+    #print readDB("amouda")
+    app.run(host='0.0.0.0',port=8080, debug=True)
 
 
