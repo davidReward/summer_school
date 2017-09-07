@@ -12,21 +12,6 @@ app = Flask(__name__)
 CORS(app,supports_credentials=True)
 
 
-def make_public_mdatum(mdata):
-    new_ressource = {}
-    for field in mdata:
-        if field == 'id':
-            new_ressource['uri'] = url_for('get_mdatum', mdatum_id=mdata['id'], _external=True)
-        else:
-            new_ressource[field]= mdata[field]
-    return new_ressource
-	
-def minimizeData(query_result):
-    query_result_New = query_result
-    
-    return query_result_New
-
-
 @auth.get_password
 def get_password(username):
     if username == USERNAME:
@@ -43,8 +28,8 @@ def not_found(error):
 
 
 
-@app.route('/api/insert', methods=['GET', 'POST'])
-@auth.login_required
+@app.route('/api/signer', methods=['GET', 'POST'])
+#@auth.login_required
 def json_in_db():
     # force erzwingt interpretation als JSON
     content = request.get_json(force=True)
@@ -52,7 +37,7 @@ def json_in_db():
     # TODO: Daten loeschen mit where 1 cond.
 
     for item in range(0,len(content)):
-        writeDB(content[item]['Name'], 'keine Position', 'keine Beschreibung', content[item]['Timespan'])
+        writeDB(content[item]['Name'], 'no position', 'no description', content[item]['Timespan'] , content[item]['URL'])
 
     #writeDB(content[0]['Name'], 'keine Position', 'keine Beschreibung', content[0]['Timespan'])
 
@@ -63,21 +48,26 @@ def json_in_db():
 
 
 @app.route('/api/signer/<string:name>', methods=['GET'])
-@auth.login_required
+#@auth.login_required
 def json_from_db(name):
     query_result = readDB(name)
     if len(query_result) != 0:
-        return jsonify({'Signers': [query_result]})
+        return jsonify({'signers': query_result})
 
 
     abort(404)
 
+@app.route('/api/signers', methods=['GET'])
+#@auth.login_required
+def json_from_db_all():
+    query_result = readDB_all()
+    if len(query_result) != 0:
+        return jsonify({'signers': query_result})
+    abort(404)
 
 
 
 if __name__ == '__main__':
-
-    #print readDB("amouda")
     app.run(host='0.0.0.0',port=8080, debug=True)
 
 
