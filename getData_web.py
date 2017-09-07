@@ -40,28 +40,11 @@ def not_found(error):
     return make_response(jsonify({'error': 'Kein Name gefunden'}), 404)
 
 
-@app.route('/api/<string:mdatum_id>', methods=['GET'])
+
+@app.route('/api/insert', methods=['GET'])
 @auth.login_required
-def get_mdatum(mdatum_id):
-    query_result = queryDB_id(mdatum_id)
-    if len(query_result) != 0:
-        return jsonify({'Messdaten': [make_public_mdatum(data) for data in query_result]  })
-    abort(404)
-
-
-@app.route('/mdata/station/<int:station>', methods=['GET'])
-@auth.login_required
-def get_mdataall(station):
-    query_result = queryDB_station(station)
-    if len(query_result) != 0:
-        return jsonify({'Messdaten': [make_public_mdatum(data) for data in query_result]})
-
-    abort(404)
-
-@app.route('/mdata/station/<int:station>/<int:unit>', methods=['GET'])
-@auth.login_required
-def get_mdataUnit(station, unit):
-    begin = request.args.get('begin')
+def get_mdataUnit(name, pos, description, date):
+    name = request.args.get('begin')
     end = request.args.get('end')
     anzahlDatenpunkte =  request.args.get('anzahl')
 
@@ -73,21 +56,6 @@ def get_mdataUnit(station, unit):
 
     abort(404)
 
-
-
-@app.route('/mdata/station', methods=['GET'])
-@auth.login_required
-def get_mStationAll():
-    query_result = queryDBallStation()
-    if len(query_result) != 0:
-        return jsonify({'Stationen': query_result})
-    abort(404)
-
-@app.route('/mdata/station', methods=['GET'])
-@auth.login_required
-def insertInDB():
-
-    abort(404)
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0',port=8080, debug=True)
+    #app.run(host='0.0.0.0',port=8080, debug=True)
+    testDB('DUMPer', '8', 'blablup', 'Sept')
