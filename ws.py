@@ -1,8 +1,8 @@
 from flask import Flask, jsonify, abort, make_response, url_for, request, Response
 from flask.ext.httpauth import HTTPBasicAuth
-from db import *
+from sss_db import *
 from flask_cors import CORS, cross_origin
-from config import *
+from sss_config import *
 import sys
 import json
 

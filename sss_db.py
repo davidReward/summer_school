@@ -1,5 +1,5 @@
 import mysql.connector as mdb
-from config import *
+from sss_config import *
 
 def connectToDB():
 	return mdb.connect(**configDB)
